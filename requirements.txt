@@ -1,0 +1,7 @@
+asgiref==3.4.1
+Django==3.2.7
+django-js-asset==1.2.2
+django-mptt==0.13.2
+Pillow==8.3.1
+pytz==2021.1
+sqlparse==0.4.1

@@ -1,0 +1,75 @@
+from django.db import models
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+from mptt.models import MPTTModel, TreeForeignKey
+from django.conf import settings
+
+
+# Create your models here.
+class Category(MPTTModel):
+    """
+    Category Table implement with MPTT
+    """
+    name = models.CharField(
+        verbose_name=_("Category Name"),
+        help_text=_("Required and unique"),
+        max_length=255,
+        unique=True
+    )
+    slug = models.SlugField(verbose_name=_("Category safe URL"),max_length=255, unique=True)
+    parent = TreeForeignKey("self", on_delete=models.CASCADE,blank=True,null=True,related_name="children")
+    image = models.ImageField(upload_to='photo/category/images', blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class MPTTMeta:
+        order_insertion_by = ["name"]
+
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
+
+    def get_url(self):
+        return reverse("store:category_list", args=[self.slug])
+
+    def __str__(self):
+        return self.name
+
+
+class Product(models.Model):
+    product_name = models.CharField(max_length=200,unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
+    description = models.TextField(max_length=255, blank=True)
+    price = models.IntegerField()
+    discount_price = models.IntegerField()
+    stock = models.IntegerField()
+    is_available = models.BooleanField(default=True)
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
+    def get_url(self):
+        return reverse("store:product_detail", args=[self.slug])
+
+    def __str__(self):
+        return self.product_name
+
+
+class ProductImage(models.Model):
+    """Product Image Table.
+    """
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_image")
+    # image = models.ImageField(upload_to="photo/images/", verbose_name=_("Images"),default="images/default.png"),
+    image = models.ImageField(upload_to = "photo/Images", null=True)
+    alt_text = models.CharField(
+        verbose_name=_("Alternative text"),
+        help_text=_("Please add alternative text"),
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+    is_feature = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        verbose_name = _("Product Image")
+        verbose_name_plural = _("Product Images")
