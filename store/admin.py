@@ -1,6 +1,6 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
-from .models import Category, Product, ProductImage
+from .models import Category, Product, Variation
 
 
 # Register your models here.
@@ -13,14 +13,20 @@ admin.site.register (
     }
 )
 
-class ProductImageInline(admin.TabularInline):
-    model = ProductImage
+
+@admin.register(Variation)
+class VariationAdmin(admin.ModelAdmin):
+    list_display = ['product', 'variation_value', 'variation_category','is_active']
+    list_editable = ['is_active',]
+    list_filter = ['product', 'variation_value', 'variation_category','is_active']
+# class ProductImageInline(admin.TabularInline):
+#     model = ProductImage
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [
-        ProductImageInline
-    ]
+    # inlines = [
+    #     ProductImageInline
+    # ]
     prepopulated_fields = {'slug':('product_name',)}
     list_display = ['product_name',]
 

@@ -42,6 +42,7 @@ class Product(models.Model):
     price = models.IntegerField()
     discount_price = models.IntegerField()
     stock = models.IntegerField()
+    image = models.ImageField(upload_to='photos/product/images')
     is_available = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -54,22 +55,46 @@ class Product(models.Model):
         return self.product_name
 
 
-class ProductImage(models.Model):
-    """Product Image Table.
-    """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_image")
-    # image = models.ImageField(upload_to="photo/images/", verbose_name=_("Images"),default="images/default.png"),
-    image = models.ImageField(upload_to = "photo/Images", null=True)
-    alt_text = models.CharField(
-        verbose_name=_("Alternative text"),
-        help_text=_("Please add alternative text"),
-        max_length=255,
-        null=True,
-        blank=True,
-    )
-    is_feature = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+class VariationManager(models.Manager):
+    def colors(self):
+        return super(VariationManager, self).filter(variation_category='color',is_active=True)
+    
+    def sizes(self):
+        return super(VariationManager, self).filter(variation_category='size',is_active=True)
 
-    class Meta:
-        verbose_name = _("Product Image")
-        verbose_name_plural = _("Product Images")
+VARIATION_CATEGORY_CHOICES = (
+    ('color','color'),
+    ('size', 'size'),
+)
+class Variation(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    variation_category = models.CharField(max_length=100,choices=VARIATION_CATEGORY_CHOICES)
+    variation_value = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    objects = VariationManager()
+
+    def __str__(self):
+        return self.variation_value
+
+
+# class ProductImage(models.Model):
+#     """Product Image Table.
+#     """
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_image")
+#     # image = models.ImageField(upload_to="photo/images/", verbose_name=_("Images"),default="images/default.png"),
+#     image = models.ImageField(upload_to = "photo/Images", null=True)
+#     alt_text = models.CharField(
+#         verbose_name=_("Alternative text"),
+#         help_text=_("Please add alternative text"),
+#         max_length=255,
+#         null=True,
+#         blank=True,
+#     )
+#     is_feature = models.BooleanField(default=False)
+#     created_at = models.DateTimeField(auto_now_add=True, editable=False)
+
+#     class Meta:
+#         verbose_name = _("Product Image")
+#         verbose_name_plural = _("Product Images")

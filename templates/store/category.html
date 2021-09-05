@@ -38,11 +38,9 @@
                             <div class="card border-0">
                                 <div>
                                     <a href="{{ product.get_url }}">
-                                        {% for image in product.product_image.all %}
-                                        {% if image.is_feature %}
-                                        <img class="img-fluid" alt="Responsive Image" src="{{image.image.url}}">
-                                        {% endif %}
-                                        {% endfor %}
+                                        
+                                        <img class="img-fluid" alt="Responsive Image" src="{{product.image.url}}">
+                                        
                                     </a>
                                 </div>
                                 <div class="card-body px-0">

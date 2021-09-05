@@ -4,53 +4,52 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<!-- ========================= SECTION MAIN ========================= -->
-<section class="section-intro padding-y-sm">
-    <div class="container">
-    
-    <div class="intro-banner-wrap">
-        <img src="{% static 'images/banners/1.jpg' %}" class="img-fluid rounded">
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'images/banners/1.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/banners/01.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/banners/02.jpg' %}" class="d-block w-100" alt="...">
+      </div>
     </div>
-    
-    </div> <!-- container //  -->
-    </section>
-    <!-- ========================= SECTION MAIN END// ========================= -->
-    
-    <!-- ========================= SECTION  ========================= -->
-    <section class="section-name padding-y-sm">
+  </div>
+<!-- ========================= SECTION  ========================= --> 
+<section class="section-name padding-y-sm">
     <div class="container">
-    
-    <header class="section-heading">
-        <a href="{% url 'store:store' %}" class="btn btn-outline-primary float-right">See all</a>
-        <h3 class="section-title">Popular products</h3>
-    </header><!-- sect-heading -->
-    
-        
-    <div class="row">
-        {% for product in products %}
-        <div class="col-md-3">
-            <div class="card card-product-grid">
-                <!-- <a href="./product-detail.html" class="img-wrap"> <img src="{{ product.images.url }}"> </a> -->
-                <a href="{{ product.get_url }}">
-                    {% for image in product.product_image.all %}
-                    {% if image.is_feature %}
-                    <img class="img-fluid" alt="Responsive Image" src="{{image.image.url}}" >
-                    {% endif %}
-                    {% endfor %}
-                  </a>
-                <figcaption class="info-wrap">
-                    <a href="./product-detail.html" class="title">{{ product.product_name }}</a>
-                    <div class="price mt-1">${{ product.price }}</div> <!-- price-wrap.// -->
-                </figcaption>
-            </div>
-        </div> <!-- col.// -->
-        {% endfor %}
 
-    </div> <!-- row.// -->
-    
-    </div><!-- container // -->
-    </section>
-    <!-- ========================= SECTION  END// ========================= -->
+        <header class="section-heading">
+            <a href="{% url 'store:store' %}" class="btn btn-outline-primary float-right">See all</a>
+            <h3 class="section-title">Popular products</h3>
+        </header>
+
+
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-3">
+                <div class="card card-product-grid">
+                    
+                    <a href="{{ product.get_url }}">
+
+                        <img class="img-fluid" alt="Responsive Image" src="{{product.image.url}}">
+
+                    </a>
+                    <figcaption class="info-wrap">
+                        <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+                        <div class="price mt-1">${{ product.price }}</div> 
+                    </figcaption>
+                </div>
+            </div> 
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>
+
 
 
 {% endblock %}
