@@ -3,7 +3,9 @@
 {% load static %}
 {% block title %}Home{% endblock %}
 {% block content %}
-
+<div>
+  {% include 'includes/alerts.html' %}
+</div>
 <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">

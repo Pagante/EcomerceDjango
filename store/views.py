@@ -11,7 +11,7 @@ from django.db.models import Q
 
 
 def home(request):
-    products = Product.objects.all().filter(is_available=True)
+    products = Product.objects.all().filter(is_available=True).order_by('id')
     paginator = Paginator(products, 8)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)

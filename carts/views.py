@@ -34,6 +34,7 @@ def add_cart(request, product_id):
             cart_id = _cart_id(request)
         )
     cart.save()
+    
 
     is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
     if is_cart_item_exists:
@@ -53,7 +54,9 @@ def add_cart(request, product_id):
             item = CartItem.objects.get(product=product, id=item_id)
             item.quantity += 1
             item.save()
-            messages.info(request, 'Item has been increased in your cart')
+            messages.success(request, 'Item has been updated')
+            
+            
 
         else:
             item = CartItem.objects.create(product=product, quantity=1, cart=cart)
@@ -71,7 +74,8 @@ def add_cart(request, product_id):
             cart_item.variations.clear()
             cart_item.variations.add(*product_variation)
         cart_item.save()
-        messages.success(request, 'Item has been added to your cart')
+        messages.success(request, 'Item has been added to you to your cart')
+        
     return redirect("carts:cart")
 
 
@@ -83,11 +87,11 @@ def remove_cart(request, product_id,cart_item_id):
         if cart_item.quantity > 1:
             cart_item.quantity -= 1
             cart_item.save()
-            messages.warning(request, 'Item has been deducted')
+            messages.info(request, 'Item has been updated')
 
         else:
             cart_item.delete()
-            messages.success(request, 'Item has been removed from your cart')
+            messages.warning(request, 'Item has been removed from your cart')
     except:
         pass
 
@@ -98,7 +102,7 @@ def remove_cart_item(request, product_id,cart_item_id):
     product = get_object_or_404(Product, id=product_id)
     cart_item = CartItem.objects.get(product=product, cart=cart, id=cart_item_id)
     cart_item.delete()
-    messages.success(request, 'Item has been removed from your cart')
+    messages.warning(request, 'Item has been removed from your cart')
     return redirect("carts:cart")
 
 
