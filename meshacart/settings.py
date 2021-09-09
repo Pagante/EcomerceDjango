@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'accounts',
     'carts',
     'orders',
+    'django_countries',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -148,5 +150,5 @@ EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
 EMAIL_HOST_USER='meshlrd14@gmail.com'
-EMAIL_HOST_PASSWORD='Happyzone23@'
+EMAIL_HOST_PASSWORD='Happyzone23@@'
 EMAIL_USE_TLS=True

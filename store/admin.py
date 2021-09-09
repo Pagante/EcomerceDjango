@@ -24,9 +24,6 @@ class VariationAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    # inlines = [
-    #     ProductImageInline
-    # ]
+    list_display = ['product_name', 'slug', 'stock', 'price']
     prepopulated_fields = {'slug':('product_name',)}
-    list_display = ['product_name',]
 
