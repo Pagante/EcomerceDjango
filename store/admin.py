@@ -1,6 +1,6 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
-from .models import Category, Product, Variation
+from .models import Category, Product, Variation, ReviewRating
 
 
 # Register your models here.
@@ -27,3 +27,5 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['product_name', 'slug', 'stock', 'price']
     prepopulated_fields = {'slug':('product_name',)}
 
+
+admin.site.register(ReviewRating)
