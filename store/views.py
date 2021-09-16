@@ -21,6 +21,7 @@ def home(request):
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
 
+    reviews = None
     for product in products:
         reviews = ReviewRating.objects.filter(product__id=product.id, status=True)
     
