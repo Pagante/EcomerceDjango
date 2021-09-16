@@ -1,7 +1,7 @@
 from django.core import paginator
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Category, Product, ReviewRating
+from .models import Category, Product, ReviewRating, ProductGallery
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -9,6 +9,8 @@ from django.db.models import Q
 from .forms import ReviewForm
 from django.contrib import messages
 from orders.models import OrderProduct, Order
+from accounts.models import UserProfile
+
 
 # Create your views here.
 
@@ -18,9 +20,13 @@ def home(request):
     paginator = Paginator(products, 8)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
+
+    for product in products:
+        reviews = ReviewRating.objects.filter(product__id=product.id, status=True)
     
     context = {
         'products': paged_products, 
+        'reviews': reviews
     }
     return render(request, 'store/index.html', context)
 
@@ -42,6 +48,7 @@ def store(request):
 
 def product_detail(request, slug):
     try:
+        userprofile = UserProfile.objects.get(user_id = request.user.id)
         product = get_object_or_404(Product, slug=slug, is_available=True)
         in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=product).exists()
     
@@ -59,11 +66,16 @@ def product_detail(request, slug):
         
     #Get Review
     reviews = ReviewRating.objects.filter(product__id=product.id, status=True)
+
+    #Get Product Gallery
+    product_gallery = ProductGallery.objects.filter(product_id = product.id)
     context = {
         'product': product,
         'in_cart': in_cart,
         'orderproduct': orderproduct,
         'reviews': reviews,
+        'userprofile': userprofile,
+        'product_gallery': product_gallery,
     }
     return render(request, 'store/single.html', context)
 
@@ -122,3 +134,5 @@ def submit_review(request, product_id):
                 data.save()
                 messages.success(request, 'Thank you! Your review has been submitted.')
                 return redirect(url)
+
+

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+    {% include 'includes/alerts.html' %}
+
+    <div class="container">
+        <div class="row">
+            {% include 'includes/dashboardsidebar.html' %}
+        <main class="col-md-9">
+          {% if orders %}
+            <article class="card">
+            <header class="card-header">
+                <strong class="d-inline-block mr-3">Your Order History:</strong>
+
+            </header>
+            
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Order #</th>
+                                    <th scope="col">Billing Name</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Order Total</th>
+                                    <th scope="col">Date</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for order in orders %}
+                                    <tr>
+                                            <th scope="row"><a href="{% url 'accounts:order_details' order.order_number %}">{{ order.order_number }}</a></th>
+                                            <th scope="row">{{ order.full_name }}</th>
+                                            <th scope="row">{{ order.phone }}</th>
+                                            <th scope="row">₦{{ order.order_total | intcomma }}0</th>
+                                            <th scope="row">{{ order.created_at }}</th>
+                                    </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                    </div>
+                </div> <!-- row.// -->
+            </div> <!-- card-body .// -->
+            </article> <!-- order-group.// -->
+        </main>
+        {% else %}
+        <div class="text-center">
+          <h2 class="fw-bold h3 mb-4">You Have No Order History</h2>
+          <a href="{% url 'store:store' %}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+        
+        {% endif %}
+    </div> <!-- row.// -->
+    </div>
+
+
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

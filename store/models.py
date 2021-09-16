@@ -113,22 +113,14 @@ class ReviewRating(models.Model):
     def __str__(self):
         return self.subject
 
-# class ProductImage(models.Model):
-#     """Product Image Table.
-#     """
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_image")
-#     # image = models.ImageField(upload_to="photo/images/", verbose_name=_("Images"),default="images/default.png"),
-#     image = models.ImageField(upload_to = "photo/Images", null=True)
-#     alt_text = models.CharField(
-#         verbose_name=_("Alternative text"),
-#         help_text=_("Please add alternative text"),
-#         max_length=255,
-#         null=True,
-#         blank=True,
-#     )
-#     is_feature = models.BooleanField(default=False)
-#     created_at = models.DateTimeField(auto_now_add=True, editable=False)
+class ProductGallery(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to = 'store/products')
 
-#     class Meta:
-#         verbose_name = _("Product Image")
-#         verbose_name_plural = _("Product Images")
+
+    class Meta:
+        verbose_name = 'product gallery'
+        verbose_name_plural = ' product gallery'
+
+    def __str__(self):
+        return self.product.product_name

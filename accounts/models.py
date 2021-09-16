@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django_countries.fields import CountryField
 
 # Create your models here.
 
@@ -68,3 +69,22 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, add_label):
         return True
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(Account, on_delete= models.CASCADE)
+    address_line_1 = models.CharField(max_length= 100, blank=True)
+    address_line_2 = models.CharField(max_length=100, blank= True)
+    profile_picture = models.ImageField(upload_to="photo/Profile")
+    city = models.CharField(blank=True, max_length=20)
+    state = models.CharField(blank=True,max_length=20)
+    country = CountryField()
+
+
+    def  full_address(self):
+        return f'{self.address_line_1} {self.address_line_2}'
+
+
+    def __str__(self):
+        return self.user.first_name
+

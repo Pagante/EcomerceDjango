@@ -6,7 +6,7 @@
 <div>
   {% include 'includes/alerts.html' %}
 </div>
-<div class="col col-md-9 col-lg-6">
+<div class="col col-md-9 col-lg-12">
   <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <!-- <div class="carousel-item active">
@@ -43,6 +43,16 @@
                     </a>
                     <figcaption class="info-wrap">
                         <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+                        <div class="rating-star">
+                          <span>
+                              <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                              <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                              <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                              <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                              <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                              <!-- <span>{{product.countReviews}} reviews</span> -->
+                          </span>
+                      </div>
                         <div class="price mt-1">₦ {{ product.price }}</div> 
                     </figcaption>
                 </div>

@@ -12,17 +12,18 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-r*q*jy3yapfqo764jj@s-n%e6xooe95fmf)qn4j6uzbvw@l*8c'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['meshakart-env.eba-cwppkwxx.us-west-2.elasticbeanstalk.com']
 
 
 # Application definition
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'orders',
     'django_countries',
     'django.contrib.humanize',
+    'admin_honeypot',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
 ]
 
 ROOT_URLCONF = 'meshacart.urls'
@@ -76,6 +79,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'meshacart.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.Account'
+
+# SESSION_EXPIRE_SECONDS = 3600  
+# SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+# SESSION_TIMEOUT_REDIRECT = 'accounts:login/'
 
 
 # Database
@@ -111,15 +118,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = config('LANGUAGE_CODE')
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = config('TIME_ZONE')
 
-USE_I18N = True
+USE_I18N = config('USE_I18N',default=True, cast=bool)
 
-USE_L10N = True
+USE_L10N = config('USE_L10N',default=True, cast=bool)
 
-USE_TZ = True
+USE_TZ = config('USE_TZ', default=True, cast=bool)
 
 
 # Static files (CSS, JavaScript, Images)
@@ -146,9 +153,10 @@ MESSAGE_TAGS = {
 }
 
 #SMTP CONFIGURATION
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST='smtp.gmail.com'
-EMAIL_PORT=587
-EMAIL_HOST_USER='meshlrd14@gmail.com'
-EMAIL_HOST_PASSWORD='Happyzone23@@'
-EMAIL_USE_TLS=True
+EMAIL_BACKEND= config('EMAIL_BACKEND')
+
+EMAIL_HOST = config('EMAIL_HOST', default='localhost')
+EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
